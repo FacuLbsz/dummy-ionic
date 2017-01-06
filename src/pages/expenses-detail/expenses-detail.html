@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Gastos</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+
+  <h3>Detalle de gastos</h3>
+  <div>
+    {{inputDetail}}
+  </div>
+
+  <h3>Monto</h3>
+  <div>
+    {{inputAmount}}
+  </div>
+  <h3>Fecha</h3>
+  <div>
+    {{inputDate}}
+  </div>  
+  <p>
+    <button ion-button color="primary" (click)='logValues()'>Aceptar detalle</button>
+  </p>
+
+</ion-content>

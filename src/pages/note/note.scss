@@ -1,0 +1,49 @@
+@import "../dumy-videos/dumy-videos.scss";
+
+page-note {
+
+    @extend page-dumy-videos;
+
+    .card-no-shadow{
+        box-shadow: none;
+    }
+
+    .cover-img{
+        max-height: 150px !important;
+        object-fit: cover;
+    }
+
+    .h1 {
+        font-size: 28px !important;
+        letter-spacing: .010em;
+        line-height: 34px;
+        font-weight: 400;
+    }
+    .h1, .h2, .h3, .h4 {
+        font-family: purista-web,sans-serif;
+        font-weight: 400;
+        color: white;
+    }
+    .content {
+        @extend .phrase;
+        margin-top: 15px;
+    }
+    .description {
+        @extend .phrase;
+        margin-top: 20px;
+    }
+
+    .phrase{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .b3 {
+        font-size: 14px;
+        line-height: 22px;
+    }
+    .b1, .b2, .b3 {
+        letter-spacing: .010em;
+        color: white;
+    }
+}

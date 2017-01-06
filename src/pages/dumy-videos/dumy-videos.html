@@ -1,0 +1,22 @@
+<ion-header class="transparent-header">
+  <ion-navbar>
+    <button ion-button menuToggle color="white">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Inicio</ion-title>
+    <ion-buttons end>
+      <button ion-button item-rigth color="white">
+      <ion-icon name="settings" class="icon-large"></ion-icon>
+    </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content class="card-list transparent-content">
+  <ion-card *ngFor="let card of videos">
+    <button ion-item (click)="getCardDetails(card)">
+        <img class= "cover-img" src="img/{{card.img}}"/>
+    <div class="card-title">{{card.title}}</div>
+    <div class="card-subtitle">{{card.description}}</div>
+      </button>
+  </ion-card>
+</ion-content>

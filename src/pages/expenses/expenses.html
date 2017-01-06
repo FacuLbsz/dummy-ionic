@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Añadir gastos</ion-title>
+    <ion-buttons end>
+      <button ion-button item-rigth>
+      <ion-icon name="gear"></ion-icon>
+    </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="expenses-form">
+  <ion-card>
+    <form (ngSubmit)="addExpense()">
+      <ion-item>
+        <ion-label floating>Detalle</ion-label>
+        <ion-input type="text" [(ngModel)]="todo.inputDetail" name="inputDetail"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Fecha</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="todo.date" name="date"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Monto</ion-label>
+        <ion-input type="text" [(ngModel)]="todo.inputAmount" name="inputAmount"></ion-input>
+      </ion-item>
+      <p>
+        <ion-buttons end>
+          <button ion-button clear color="primary" type="button" (click)='addComments()' item-right>Añadir comentarios</button>
+          <button ion-button clear type="submit" item-right>Añadir</button>
+        </ion-buttons>
+      </p>
+    </form>
+  </ion-card>
+
+  <ion-card>
+    <ion-list>
+      <ion-list-header class='list-header'>
+        Comentarios
+      </ion-list-header>
+      <ion-item *ngFor="let observation of observations">
+        {{observation}}
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <ion-card>
+    <ion-list>
+      <ion-list-header class='list-header'>
+        Gastos $ {{totalExpenses}}
+        <ion-icon item-right [hidden]="expenses.length > 0">Cargando..</ion-icon>
+      </ion-list-header>
+      <ion-item-sliding *ngFor="let expense of expenses">
+        <button ion-item (click)="getDetail(expense)">
+        {{expense.detail}}      
+      </button>
+        <ion-item-options side="right">
+          <button ion-button color="danger" (click)="removeExpense(expense)">
+        <ion-icon name="trash"></ion-icon>
+        Eliminar
+      </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </ion-card>
+</ion-content>
