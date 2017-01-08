@@ -51,8 +51,8 @@
     <ion-list>
       <ion-list-header class='list-header'>
         Gastos $ {{totalExpenses}}
-        <ion-icon item-right [hidden]="expenses.length > 0">Cargando..</ion-icon>
       </ion-list-header>
+      <ion-item item-right [hidden]="isEmptyExpenses || expenses.lenght > 0">Cargando..</ion-item>
       <ion-item-sliding *ngFor="let expense of expenses">
         <button ion-item (click)="getDetail(expense)">
         {{expense.detail}}      

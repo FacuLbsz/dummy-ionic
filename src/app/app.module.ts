@@ -1,3 +1,4 @@
+import { AuthService } from './../providers/auth/auth.service';
 import { LoginPage } from './../pages/login/login';
 import { ProfilePage } from './../pages/profile/profile';
 import { ExpensesService } from './../providers/expenses-service';
@@ -14,9 +15,10 @@ import { ExpensesForm } from '../pages/expenses/expenses';
 import { ExpensesDetailsPage } from '../pages/expenses-detail/expenses-detail';
 import { DetailForm } from '../pages/detail-form/detail-form';
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
-import { AuthService } from './auth.service';
 import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
+import { AngularFireModule } from 'angularfire2';
+
 
 let storage: Storage = new Storage();
 
@@ -26,6 +28,14 @@ export function getAuthHttp(http) {
     tokenGetter: (() => storage.get('id_token'))
   }), http);
 }
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyDUKZyGSEVpEdcLG2ntIJC6LXJI7IHbB-M",
+  authDomain: "proyecto-dummy-312017.firebaseapp.com",
+  databaseURL: "https://proyecto-dummy-312017.firebaseio.com",
+  storageBucket: "proyecto-dummy-312017.appspot.com",
+  messagingSenderId: "940437092764"
+};
 
 @NgModule({
   declarations: [
@@ -43,7 +53,9 @@ export function getAuthHttp(http) {
     LoginPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseConfig)
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [

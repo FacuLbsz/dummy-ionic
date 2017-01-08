@@ -1,7 +1,9 @@
-import { Expenses } from './../../app/database';
-import { ExpensesService } from './../../providers/expenses-service';
+import { AuthService } from './../../providers/auth/auth.service';
+import { UserForm } from './../form/user/user-form';
+import { ExpensesFirebase } from './../../providers/database/expenses-firebase';
+import { AngularFireDatabase } from 'angularfire2';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { ExpensesDetailsPage } from '../expenses-detail/expenses-detail';
 
 
@@ -14,64 +16,49 @@ export class ExpensesForm {
     public todo = { inputDetail: '', inputAmount: "", date: this.date }
     public totalExpenses: number = 0;
 
-    private id: number = 0;
+    public expenses_firebase: ExpensesFirebase;
 
+    private id: number = 0;
     public expenses: Array<any> = new Array<any>();
+    public isEmptyExpenses: boolean = false;
+
     public observations: Array<any> = new Array<any>();
 
-    constructor(public nav: NavController, public alertCtrl: AlertController, public params: NavParams, public expensesService: ExpensesService, public toastCtrl: ToastController) {
-        this.loadExpenses();
+    public user: UserForm;
 
+    constructor(public nav: NavController, public alertCtrl: AlertController, public params: NavParams, public database: AngularFireDatabase, public auth: AuthService) {
+
+        this.user = auth.getUser();
+
+        this.expenses_firebase = new ExpensesFirebase(nav, alertCtrl, database, this.user);
+        this.expenses_firebase.getExpenses().subscribe(expns => {
+            let dummyArray: Array<any> = expns;
+            if (dummyArray != null && dummyArray.length != null) {
+                this.expenses = new Array<any>();
+                this.totalExpenses = 0;
+                this.isEmptyExpenses = true;
+                for (var i = 0; i < dummyArray.length; i++) {
+                    this.expenses.push({ id: expns[i].id, detail: expns[i].detail, amount: expns[i].amount, date: expns[i].date, key: expns[i].$key });
+                    this.totalExpenses = this.totalExpenses + parseInt(expns[i].amount);
+                }
+            }
+        });
     }
 
     addExpense() {
         if (this.todo.inputDetail.length != 0 && this.todo.inputAmount.length != 0) {
-            let dbExpense = new Expenses(this.todo.inputDetail, parseInt(this.todo.inputAmount), new Date(this.todo.date));
-            var idExpense: number;
-            dbExpense.save().then((onFulfilled) => {
-                idExpense = onFulfilled;
-            });
-            console.log("id nuevo:" + idExpense)
-            this.addItem(idExpense, this.todo.inputDetail, this.todo.inputAmount, this.todo.date);
+            this.expenses_firebase.createExpense(this.id, this.todo.inputDetail, this.todo.inputAmount, this.todo.date);
             this.cleanForm();
+            this.id++;
         }
-    }
-
-    addItem(id, detail, amount, date) {
-        this.expenses.unshift({ id: id, detail: detail, amount: amount, date: date });
-        this.totalExpenses = this.totalExpenses + parseInt(amount);
-        this.id++;
-
-    }
-
-    loadExpenses() {
-
-        /* let dummyData: any[] = [];
- 
-         this.expensesService.getData().then(data => {
- 
-             dummyData = data;
- 
-             for (var i = 0; i < dummyData.length; i++) {
-                 this.addItem(dummyData[i].name.first, dummyData[i].location.postcode, new Date());
-             }
- 
-         })*/
-
-        Expenses.all().then((resultados) => {
-            let dummyData: any[] = [];
-            dummyData = resultados;
-            for (var i = 0; i < dummyData.length; i++) {
-                this.addItem(dummyData[i].id, dummyData[i].detail, dummyData[i].amount, dummyData[i].date);
-            }
-        })
-
-
+        this.listComments();
     }
 
     cleanForm() {
 
-        this.todo = { inputDetail: '', inputAmount: "", date: this.date }
+        this.todo.inputDetail = '';
+        this.todo.inputAmount = "";
+        this.todo.date = new Date().toISOString();
 
     }
 
@@ -114,32 +101,7 @@ export class ExpensesForm {
     }
 
     removeExpense(expenseToDelete) {
-
-
-        Expenses.remove(expenseToDelete.id).then((resultados) => {
-            console.log("Resultado de delete" + resultados);
-            for (var i = 0; i < this.expenses.length; i++) {
-                if (this.expenses[i].id == expenseToDelete.id) {
-
-                    this.totalExpenses = this.totalExpenses - parseInt(this.expenses[i].amount);
-                    this.expenses.splice(i, 1);
-                }
-            }
-        })
-
-    }
-
-    successfullCreate() {
-        let toast = this.toastCtrl.create({
-            message: 'Gasto creado correctamente',
-            duration: 1500
-        });
-
-        toast.onDidDismiss(() => {
-            console.log('Dismissed toast');
-        });
-
-        toast.present();
+        this.expenses_firebase.removeExpense(expenseToDelete);
     }
 
 

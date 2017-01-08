@@ -1,4 +1,4 @@
-import { AuthService } from './../../app/auth.service';
+import { AuthService } from './../../providers/auth/auth.service';
 import { CardDetailPage } from './../card-detail/card-detail';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';

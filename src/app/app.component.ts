@@ -1,5 +1,5 @@
+import { AuthService } from './../providers/auth/auth.service';
 import { ProfilePage } from './../pages/profile/profile';
-import { AuthService } from './auth.service';
 import { DumyVideosPage } from './../pages/dumy-videos/dumy-videos';
 import { Component, ViewChild } from '@angular/core';
 

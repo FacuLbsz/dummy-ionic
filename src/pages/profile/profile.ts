@@ -1,4 +1,4 @@
-import { AuthService } from './../../app/auth.service';
+import { AuthService } from './../../providers/auth/auth.service';
 import { Component } from '@angular/core';
 import { Nav, Events } from 'ionic-angular';
 

@@ -1,3 +1,4 @@
+import { UserForm } from './../../pages/form/user/user-form';
 import { Storage } from '@ionic/storage';
 import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
 import { Injectable, NgZone } from '@angular/core';
@@ -9,6 +10,8 @@ declare var Auth0Lock: any;
 
 @Injectable()
 export class AuthService {
+
+    userForm: UserForm;
 
     jwtHelper: JwtHelper = new JwtHelper();
     auth0 = new Auth0({ clientID: 'kfhf2WmcFV6HRdRrCJaYBljQMuBpZ2zJ', domain: 'faculbsz.auth0.com' });
@@ -23,7 +26,7 @@ export class AuthService {
     storage: Storage = new Storage();
     refreshSubscription: any;
     user: Object;
-    loading : boolean = true;
+    loading: boolean = true;
     zoneImpl: NgZone;
     idToken: string;
 
@@ -66,6 +69,14 @@ export class AuthService {
             this.scheduleRefresh();
 
         });
+    }
+
+    getUser(): UserForm {
+        let jsonUser: any = [{ nickname: '', mail: '' }];
+
+        jsonUser = this.user;
+
+        return new UserForm(jsonUser.nickname, jsonUser.mail);
     }
 
     public authenticated() {
