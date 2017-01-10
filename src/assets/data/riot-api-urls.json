@@ -1,0 +1,8 @@
+{
+    "api_key": "RGAPI-92ba2481-3541-4de0-a28c-e93c71aa2d87",
+    "api_pvp_net_url": "https://{{region}}.api.pvp.net/",
+    "region_to_replace": "{{region}}",
+    "api_key_to_replace": "{{api_key}}",
+    "getSummonerCurrentGameInfoById": "observer-mode/rest/consumer/getSpectatorGameInfo/LA2/{{getSummonerCurrentGameInfoById}}?api_key={{api_key}}",
+    "getSummonerIdByName": "api/lol/{{region}}/v1.4/summoner/by-name/{{getSummonerIdByName}}?api_key={{api_key}}"
+}

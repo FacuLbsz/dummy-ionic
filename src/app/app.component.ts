@@ -1,3 +1,4 @@
+import { MyOpGGImp } from './../providers/my-op-gg-imp';
 import { AuthService } from './../providers/auth/auth.service';
 import { ProfilePage } from './../pages/profile/profile';
 import { DumyVideosPage } from './../pages/dumy-videos/dumy-videos';
@@ -31,7 +32,8 @@ export class MyApp {
     public events: Events,
     public platform: Platform,
     public menu: MenuController,
-    public auth: AuthService
+    public auth: AuthService,
+    public opgg : MyOpGGImp
   ) {
     this.initializeApp();
     // set our app's pages

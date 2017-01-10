@@ -1,3 +1,4 @@
+import { MyOpGGImp } from './../providers/my-op-gg-imp';
 import { AuthService } from './../providers/auth/auth.service';
 import { LoginPage } from './../pages/login/login';
 import { ProfilePage } from './../pages/profile/profile';
@@ -72,7 +73,7 @@ export const firebaseConfig = {
     ProfilePage,
     LoginPage
   ],
-  providers: [ExpensesService, AuthService,
+  providers: [ExpensesService, MyOpGGImp, AuthService,
     {
       provide: AuthHttp,
       useFactory: getAuthHttp,
