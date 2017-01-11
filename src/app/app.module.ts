@@ -1,3 +1,5 @@
+import { MySummoners } from './../providers/my-summoners';
+import { MySummonerListPage } from './../pages/my-summoner-list/my-summoner-list';
 import { MyOpGGImp } from './../providers/my-op-gg-imp';
 import { AuthService } from './../providers/auth/auth.service';
 import { LoginPage } from './../pages/login/login';
@@ -51,7 +53,8 @@ export const firebaseConfig = {
     CardDetailPage,
     NotePage,
     ProfilePage,
-    LoginPage
+    LoginPage,
+    MySummonerListPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -71,9 +74,10 @@ export const firebaseConfig = {
     CardDetailPage,
     NotePage,
     ProfilePage,
-    LoginPage
+    LoginPage,
+    MySummonerListPage
   ],
-  providers: [ExpensesService, MyOpGGImp, AuthService,
+  providers: [ExpensesService, MyOpGGImp, MySummoners, AuthService,
     {
       provide: AuthHttp,
       useFactory: getAuthHttp,

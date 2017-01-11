@@ -14,7 +14,6 @@ export class AuthService {
     userForm: UserForm;
 
     jwtHelper: JwtHelper = new JwtHelper();
-    auth0 = new Auth0({ clientID: 'kfhf2WmcFV6HRdRrCJaYBljQMuBpZ2zJ', domain: 'faculbsz.auth0.com' });
     lock = new Auth0Lock('kfhf2WmcFV6HRdRrCJaYBljQMuBpZ2zJ', 'faculbsz.auth0.com', {
         auth: {
             redirect: false,
@@ -23,6 +22,7 @@ export class AuthService {
             }
         }
     });
+    auth0 = new Auth0({ clientID: 'kfhf2WmcFV6HRdRrCJaYBljQMuBpZ2zJ', domain: 'faculbsz.auth0.com' });
     storage: Storage = new Storage();
     refreshSubscription: any;
     user: Object;

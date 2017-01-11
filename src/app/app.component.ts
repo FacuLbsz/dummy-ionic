@@ -1,3 +1,4 @@
+import { MySummonerListPage } from './../pages/my-summoner-list/my-summoner-list';
 import { MyOpGGImp } from './../providers/my-op-gg-imp';
 import { AuthService } from './../providers/auth/auth.service';
 import { ProfilePage } from './../pages/profile/profile';
@@ -32,13 +33,14 @@ export class MyApp {
     public events: Events,
     public platform: Platform,
     public menu: MenuController,
-    public auth: AuthService,
-    public opgg : MyOpGGImp
+    public opgg: MyOpGGImp,
+    public auth: AuthService
   ) {
     this.initializeApp();
     // set our app's pages
     this.pages = [
       { title: 'Hello Ionic', component: HelloIonicPage },
+      { title: 'Mis Summoners', component: MySummonerListPage },
       { title: 'My First List', component: ListPage },
       { title: 'Gastos', component: ExpensesForm },
       { title: 'Cards', component: DumyVideosPage },
@@ -54,13 +56,21 @@ export class MyApp {
       StatusBar.overlaysWebView(true);
       StatusBar.backgroundColorByName('red');
       //StatusBar.styleDefault();
-      this.auth.startupTokenRefresh();
+      if (this.auth) {
+        this.auth.startupTokenRefresh();
+      }
     });
     this.events.publish('logout', MyApp);
   }
 
   loadingAuth() {
-    return this.auth.loading;
+    if (this.auth != null) {
+      return this.auth.loading;
+    }
+    else {
+      console.error('*************NO INTERNET***********');
+      return false;
+    }
   }
 
   openPage(page) {
