@@ -26,6 +26,7 @@
     "angular2-jwt": "0.1.27",
     "angularfire2": "^2.0.0-beta.6",
     "auth0-lock": "^10.8.1",
+    "bootstrap": "^3.3.7",
     "dexie": "^1.5.1",
     "express": "4.14.0",
     "firebase": "^3.6.4",

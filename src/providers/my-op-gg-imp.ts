@@ -80,10 +80,17 @@ export class MyOpGGImp {
   }
 
   getSummonerCurrentGameInfoByName(region: string, summoner: string) {
-    return this.getSummonerCurrentGameInfoById(region, this.getSummonerIdByName(region, summoner));
+
+    let summonerSearched;
+    this.getSummonerIdByName(region, summoner).then((data) => {
+      let dataSummoners: any = data;
+      summonerSearched = dataSummoners.id;
+      return this.getSummonerCurrentGameInfoById(region, summonerSearched);
+    });
+
   }
 
-  getSummonerIdByName(region: string, summoner: string): number {
+  getSummonerIdByName(region: string, summoner: string) {
     if (!region) {
       //error
     }
@@ -91,19 +98,24 @@ export class MyOpGGImp {
     let api_url: string = this.conf.getSummonerIdByName;
     let pvp_net_url: string = this.getUrlFormmated(api_url, region, '{{getSummonerIdByName}}', summoner, this.conf.api_key, new ReplacerForSummonerId());
 
-    let id: number;
+    let data = { id: "" };
 
     console.log('URL: ' + pvp_net_url);
 
-    this.http.get(pvp_net_url)
-      .map(res => res.json())
-      .subscribe(data => {
-        console.table(data);
-        id = data.id;
-      }, error => {
-        console.table(error);
-      });
-    return id;
+    return new Promise(resolve => {
+      this.http.get(pvp_net_url)
+        .map(res => res.json())
+        .subscribe(data => {
+          console.table(data);
+          data.id = data[summoner].id;
+          console.log('summoner by id:', data.id);
+          resolve(data);
+        }, error => {
+          console.error('summoner by id:')
+          console.table(error);
+        })
+    });
+    //return id;
   }
 
 }

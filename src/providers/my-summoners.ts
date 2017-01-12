@@ -1,3 +1,4 @@
+import { UserForm } from './../pages/form/user/user-form';
 import { FirebaseListObservable, AngularFireDatabase } from 'angularfire2';
 import { SummonerModel } from './../pages/form/summoner/summoner-model';
 import { Injectable } from '@angular/core';
@@ -14,11 +15,16 @@ import 'rxjs/add/operator/map';
 export class MySummoners {
 
   summonersDb: FirebaseListObservable<any>;
-
   summonersLoaded: boolean = false;
+  user: UserForm;
 
   constructor(public http: Http, public database: AngularFireDatabase) {
     console.log('Hello MySummoners Provider');
+  }
+
+  load(user: UserForm) {
+    this.user = user;
+    this.summonersDb = this.database.list('/summoners/' + user.user.replace('.', '') + '/');
   }
 
   exist(region: string, summoner: string): number {
@@ -27,7 +33,13 @@ export class MySummoners {
 
   getSummonersByUser(user: string): Array<SummonerModel> {
     let summoners = new Array<SummonerModel>();
-    this.summonersDb = this.database.list('/summoners/' + user.replace('.', '') + '/');
+    this.summonersDb.forEach(summoner => {
+      let newSummoner = new SummonerModel();
+      console.log("****SUMMONER FAV***", summoner[0].name)
+      newSummoner.id = summoner[0].id;
+      newSummoner.name = summoner[0].name;
+      summoners.push(newSummoner);
+    });
     return summoners;
   }
 

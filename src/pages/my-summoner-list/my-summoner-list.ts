@@ -29,19 +29,20 @@ export class MySummonerListPage {
   constructor(public navCtrl: NavController, public mySummonersService: MySummoners, public auth: AuthService, public riotService: MyOpGGImp) {
 
     this.user = auth.getUser();
+    mySummonersService.load(this.user);
+    this.loadSummoners();
   }
 
   ionViewDidLoad() {
     console.log('Hello MySummonerListPage Page');
-    this.loadSummoners();
   }
 
   loadSummoners() {
-    this.summoners = this.mySummonersService.getSummonersByUser(this.user.user);
+    this.summoners.concat(this.mySummonersService.getSummonersByUser(this.user.user));
   }
 
   searchSummoner() {
-
+    console.log(this.region);
     if (this.summoner.length > 0) {
       let summonerId: number = this.mySummonersService.exist(this.region, this.summoner);
       if (summonerId > -1) {
@@ -67,14 +68,24 @@ export class MySummonerListPage {
           console.log("Agregando summoner");
         }
       } else {
-        let summonerId: number = this.riotService.getSummonerIdByName(this.region, this.summoner);
-        if (summonerId > -1) {
-          //agregar a summoner fav
-          this.summoners.push(new SummonerModel());
-        }
-        else {
-          console.error("*********No existe el usuario************");
-        }
+        this.riotService.getSummonerIdByName(this.region, this.summoner).then((data) => {
+          let dataSummoners: any = data;
+          summonerId = dataSummoners.id;
+          console.error("*********post getSummonerIdByName************", summonerId);
+          if (summonerId > -1) {
+            //agregar a summoner fav
+            let newSummoner = new SummonerModel();
+            newSummoner.id = summonerId;
+            newSummoner.name = this.summoner;
+            this.summoners.push(newSummoner);
+            this.mySummonersService.addFavSummonerByUser(this.summoner, newSummoner.id, this.user.user);
+            console.error("*********No (existe el usuario************", summonerId);
+          }
+          else {
+            console.error("*********No existe el usuario************", summonerId);
+          }
+
+        });
       }
     }
   }

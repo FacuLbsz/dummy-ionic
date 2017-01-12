@@ -10,31 +10,47 @@
 
 <ion-content padding>
   <form id=formId (ngSubmit)="searchSummoner()" #refForm="ngForm">
-    <ion-item>
-      <ion-label floating>Player</ion-label>
-      <ion-input type="text" [(ngModel)]="summoner" name="summoner"></ion-input>
-    </ion-item>
-    <p>
-      <ion-buttons end>
-        <button ion-button clear primary type="button" (click)="addSummonerToFav()">Añadir a favoritos</button>
-        <button ion-button clear primary type="submit">Buscar</button>
-      </ion-buttons>
-    </p>
+
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+      <ion-item>
+        <ion-label floating>Player</ion-label>
+        <ion-input type="text" [(ngModel)]="summoner" name="summoner"></ion-input>
+      </ion-item>
+    </div>
+
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+      <ion-item>
+        <ion-label floating>Region</ion-label>
+        <ion-select [(ngModel)]="region" [ngModelOptions]="{standalone: true}">
+          <ion-option *ngFor="let region of regions" value="{{region}}">{{region}} </ion-option>
+        </ion-select>
+      </ion-item>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <p>
+        <ion-buttons end>
+          <button ion-button clear primary type="button" (click)="addSummonerToFav()">Añadir a favoritos</button>
+          <button ion-button clear primary type="submit">Buscar</button>
+        </ion-buttons>
+      </p>
+    </div>
   </form>
-  <ion-list>
-    <ion-list-header>
-      Favoritos
-    </ion-list-header>
-    <ion-item-sliding *ngFor="let summoner of summoners">
-      <button ion-item (click)="getDetail(summoner)">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <ion-list>
+      <ion-list-header>
+        Favoritos
+      </ion-list-header>
+      <ion-item-sliding *ngFor="let summoner of summoners">
+        <button ion-item (click)="getDetail(summoner)">
         {{summoner.name}}      
       </button>
-      <ion-item-options side="right">
-        <button ion-button color="danger" (click)="removeSummoner(summoner)">
+        <ion-item-options side="right">
+          <button ion-button color="danger" (click)="removeSummoner(summoner)">
         <ion-icon name="trash"></ion-icon>
         Eliminar
       </button>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
 </ion-content>
