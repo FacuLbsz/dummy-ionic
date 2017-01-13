@@ -24,33 +24,54 @@ export class MySummoners {
 
   load(user: UserForm) {
     this.user = user;
+    console.log("*****LOAD() USER ", this.user);
     this.summonersDb = this.database.list('/summoners/' + user.user.replace('.', '') + '/');
   }
 
-  exist(region: string, summoner: string): number {
-    return -1;
+  exist(region: string, summonerName: string) {
+    return new Promise(resolve => {
+      let subscription = this.getSummonersByUser()
+        .subscribe(summoners => {
+
+          summoners.forEach(element => {
+            Object.keys(element).map(key => {
+              let objectSummoner = element[key];
+              if (key != "$exists" && objectSummoner instanceof Object) {
+                if (summonerName == element[key].name) {
+                  resolve(element[key].id);
+                  subscription.unsubscribe;
+                }
+              }
+            });
+          })
+          //resolve(-1);
+        });
+    });
   }
 
-  getSummonersByUser(user: string): Array<SummonerModel> {
-    let summoners = new Array<SummonerModel>();
-    this.summonersDb.forEach(summoner => {
-      let newSummoner = new SummonerModel();
-      console.log("****SUMMONER FAV***", summoner[0].name)
-      newSummoner.id = summoner[0].id;
-      newSummoner.name = summoner[0].name;
-      summoners.push(newSummoner);
-    });
-    return summoners;
+  getSummonersByUser() {
+    return this.summonersDb;
   }
 
-  getFavBySummonerAndUser(summonerId: number, user: string): boolean {
+  getFavBySummonerAndUser(summonerId: number) {
+    return new Promise(resolve => {
+      let subscription = this.getSummonersByUser()
+        .subscribe(summoners => {
 
-    this.getSummonersByUser(user).forEach((element) => {
-      if (element.id == summonerId) {
-        return true;
-      }
+          summoners.forEach(element => {
+            Object.keys(element).map(key => {
+              let objectSummoner = element[key];
+              if (key != "$exists" && objectSummoner instanceof Object) {
+                if (summonerId == element[key].id) {
+                  resolve(true);
+                  subscription.unsubscribe;
+                }
+              }
+            });
+          })
+
+        });
     });
-    return false;
   }
 
   addFavSummonerByUser(summoner: string, summonerId: number, user: string) {

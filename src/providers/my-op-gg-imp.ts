@@ -24,7 +24,6 @@ export class MyOpGGImp {
   }
 
   constructor(public http: Http) {
-    this.getSummonerCurrentGameInfoByName("na", "imaqtpie");
   }
 
 
@@ -58,15 +57,19 @@ export class MyOpGGImp {
     let pvp_net_url: string = this.getUrlFormmated(api_url, region, '{{getSummonerCurrentGameInfoById}}', summonerId, this.conf.api_key, new ReplacerForCurrentGame());
 
 
-    console.log('URL: ' + pvp_net_url);
-
-    this.http.get(pvp_net_url)
-      .map(res => res.json())
-      .subscribe(data => {
-        console.table(data);
-      }, error => {
-        console.table(error);
-      });
+    return new Promise(resolve => {
+      console.log('URL: ' + pvp_net_url);
+      this.http.get(pvp_net_url)
+        .map(res => res.json())
+        .subscribe(data => {
+          console.log("data by id");
+          console.table(data);
+          resolve(data);
+        }, error => {
+          console.table(error);
+          console.error("No se pudo obtener el juego del summoner", error);
+        });
+    });
   }
 
   logProperties(rej) {
@@ -81,11 +84,14 @@ export class MyOpGGImp {
 
   getSummonerCurrentGameInfoByName(region: string, summoner: string) {
 
-    let summonerSearched;
-    this.getSummonerIdByName(region, summoner).then((data) => {
-      let dataSummoners: any = data;
-      summonerSearched = dataSummoners.id;
-      return this.getSummonerCurrentGameInfoById(region, summonerSearched);
+    return new Promise(resolve => {
+      this.getSummonerIdByName(region, summoner).then((data: any) => {
+        console.log("Summoner by name", data);
+        console.table(data);
+        resolve(this.getSummonerCurrentGameInfoById(region, data.id));
+      }).catch(error => {
+        console.error("No se pudo obtener el id", error);
+      })
     });
 
   }
@@ -105,11 +111,13 @@ export class MyOpGGImp {
     return new Promise(resolve => {
       this.http.get(pvp_net_url)
         .map(res => res.json())
-        .subscribe(data => {
-          console.table(data);
-          data.id = data[summoner].id;
-          console.log('summoner by id:', data.id);
-          resolve(data);
+        .subscribe(res => {
+          console.table(res);
+          Object.keys(res).map(element => {
+            data = res[element];
+            console.log('summoner by id:', data.id);
+            resolve(data);
+          });
         }, error => {
           console.error('summoner by id:')
           console.table(error);
